@@ -9,6 +9,7 @@ namespace HotelAPI.Controllers
 {
     [Route("/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class RoomsController : ControllerBase
     {
         [HttpGet(Name = nameof(GetRooms))]
