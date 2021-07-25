@@ -1,4 +1,5 @@
 using HotelAPI.Filters;
+using HotelAPI.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using HotelAPI.Services;
 
 namespace HotelAPI
 {
@@ -32,6 +35,17 @@ namespace HotelAPI
                 options.AddPolicy("HotelApiCorsPolicy", policy =>
                     policy.AllowAnyOrigin()); //Reconfigure this for prod. #todo
             });
+
+            services.Configure<HotelInfo>(
+                Configuration.GetSection("HotelInfo"));
+
+            services.AddScoped<IRoomService, DefaultRoomsService>();
+            
+            services.AddDbContext<HotelApiDBContext>(options => {
+                //Dev Config for dbcontext
+                options.UseInMemoryDatabase("hotelDb");
+            });
+
             services.AddMvc(options =>
             {
                 options.Filters.Add<JsonExceptionFilter>();
@@ -66,8 +80,8 @@ namespace HotelAPI
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "My Test1 Api v1");
             });
-            app.UseCors("HotelApiCorsPolicy");
             app.UseRouting();
+            app.UseCors("HotelApiCorsPolicy");
 
             app.UseAuthorization();
 
