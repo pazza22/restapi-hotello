@@ -29,6 +29,7 @@ namespace HotelAPI
         {
             services.AddMvc(options => {
                 options.Filters.Add<JsonExceptionFilter>();
+                options.Filters.Add<RequireHttpsOrCloseAttribute>();
             });
             services.AddControllers();
             services.AddRouting(options =>
@@ -59,9 +60,6 @@ namespace HotelAPI
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "My Test1 Api v1");
             });
-
-
-            app.UseHttpsRedirection();
 
             app.UseRouting();
 
