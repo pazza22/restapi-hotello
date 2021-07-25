@@ -27,7 +27,13 @@ namespace HotelAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options => {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("HotelApiCorsPolicy", policy =>
+                    policy.AllowAnyOrigin()); //Reconfigure this for prod. #todo
+            });
+            services.AddMvc(options =>
+            {
                 options.Filters.Add<JsonExceptionFilter>();
                 options.Filters.Add<RequireHttpsOrCloseAttribute>();
             });
@@ -60,7 +66,7 @@ namespace HotelAPI
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "My Test1 Api v1");
             });
-
+            app.UseCors("HotelApiCorsPolicy");
             app.UseRouting();
 
             app.UseAuthorization();
