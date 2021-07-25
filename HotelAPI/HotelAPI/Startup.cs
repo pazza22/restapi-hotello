@@ -15,6 +15,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using HotelAPI.Services;
+using HotelAPI.Infrastructure;
 
 namespace HotelAPI
 {
@@ -40,8 +41,9 @@ namespace HotelAPI
                 Configuration.GetSection("HotelInfo"));
 
             services.AddScoped<IRoomService, DefaultRoomsService>();
-            
-            services.AddDbContext<HotelApiDBContext>(options => {
+
+            services.AddDbContext<HotelApiDBContext>(options =>
+            {
                 //Dev Config for dbcontext
                 options.UseInMemoryDatabase("hotelDb");
             });
@@ -65,6 +67,10 @@ namespace HotelAPI
                 options.ApiVersionSelector = new CurrentImplementationApiVersionSelector(options);
             });
             services.AddSwaggerGen();
+            services.AddAutoMapper(options =>
+            {
+                options.AddProfile<MappingProfile>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

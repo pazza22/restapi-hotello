@@ -1,4 +1,5 @@
-﻿using HotelAPI.Models;
+﻿using AutoMapper;
+using HotelAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,12 @@ namespace HotelAPI.Services
     public class DefaultRoomsService : IRoomService
     {
         private readonly HotelApiDBContext _context;
+        private readonly IMapper _mapper;
 
-        public DefaultRoomsService(HotelApiDBContext context)
+        public DefaultRoomsService(HotelApiDBContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<Room> GetRoomAsync(Guid id)
@@ -25,12 +28,7 @@ namespace HotelAPI.Services
                 return null;
             }
 
-            return new Room
-            {
-                Name = entity.Name,
-                Rate = entity.Rate / 100.0m,
-                Href = null
-            };
+            return _mapper.Map<Room>(entity);
         }
     }
 }
