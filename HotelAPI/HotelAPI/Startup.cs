@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using HotelAPI.Services;
 using HotelAPI.Infrastructure;
+using LandonApi.Filters;
 
 namespace HotelAPI
 {
@@ -52,6 +53,7 @@ namespace HotelAPI
             {
                 options.Filters.Add<JsonExceptionFilter>();
                 options.Filters.Add<RequireHttpsOrCloseAttribute>();
+                options.Filters.Add<LinkRewritingFilter>();
             });
             services.AddControllers();
             services.AddRouting(options =>
